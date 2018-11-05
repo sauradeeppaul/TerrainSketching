@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28010.2046
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Sketch_Terrain", "Sketch_Terrain\Sketch_Terrain.vcxproj", "{DB5B1941-716E-4196-85F5-03C03E95267B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{DB5B1941-716E-4196-85F5-03C03E95267B}.Debug|x64.ActiveCfg = Debug|x64
+		{DB5B1941-716E-4196-85F5-03C03E95267B}.Debug|x64.Build.0 = Debug|x64
+		{DB5B1941-716E-4196-85F5-03C03E95267B}.Debug|x86.ActiveCfg = Debug|Win32
+		{DB5B1941-716E-4196-85F5-03C03E95267B}.Debug|x86.Build.0 = Debug|Win32
+		{DB5B1941-716E-4196-85F5-03C03E95267B}.Release|x64.ActiveCfg = Release|x64
+		{DB5B1941-716E-4196-85F5-03C03E95267B}.Release|x64.Build.0 = Release|x64
+		{DB5B1941-716E-4196-85F5-03C03E95267B}.Release|x86.ActiveCfg = Release|Win32
+		{DB5B1941-716E-4196-85F5-03C03E95267B}.Release|x86.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {C1AA2748-6E5A-4994-81D8-E728A760DE75}
+	EndGlobalSection
+EndGlobal
