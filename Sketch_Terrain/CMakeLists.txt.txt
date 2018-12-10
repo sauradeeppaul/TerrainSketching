@@ -1,0 +1,3 @@
+project (Sketch_Terrain)
+  
+add_executable(Sketch_Terrain main_file.cpp)

@@ -4,23 +4,38 @@
 #include <algorithm>
 #include <gl/glut.h>
 #include <cmath>
+#include <stack>
+
+using namespace std;
 
 int baseArray[5000][2];
 int heightArray[5000][2];
 int b = 0;
+
+int stackSize = 0;
+
 int h = 0;
+stack <int> hStack;
+
 int LEFT_BUTTON_PRESSED = 0;
+
+stack <int>mHStack;
 int minHeight = 10000;
+
+stack <int>MHStack;
 int maxHeight = -10000;
 
+stack <int>mBStack;
 int minBoundary = 10000;
-int maxBoundary = -10000;
+
+stack <int>MBStack;
+int maxBoundary = -10000;	
 
 static float BASE_PLANE = -30.0;
 
 static int BASE_MODE = 0;
 static int HEIGHT_MODE = 1;
-static int GENERATE_PERLIN = 2;
+static int VIEW_MODE = 2;
 int Mode;
 
 float angle = 0.0;
@@ -42,21 +57,53 @@ static int bottomColor[3] = { 94, 68, 26 };
 
 #define N 4
 
+void pushIntoStacks() {
+	if (stackSize > 1 && h == hStack.top())
+		return;
+	hStack.push(h);
+	mHStack.push(minHeight);
+	MHStack.push(maxHeight);
+	mBStack.push(minBoundary);
+	MBStack.push(maxBoundary);
+
+	stackSize += 1;
+}
+
+void popFromStacks() {
+	if (stackSize <= 1)
+		return;
+
+	hStack.pop();
+	mHStack.pop();
+	MHStack.pop();
+	mBStack.pop();
+	MBStack.pop();
+
+	h = hStack.top();
+	minHeight = mHStack.top();
+	maxHeight = MHStack.top();
+	minBoundary = mBStack.top();
+	maxBoundary = MBStack.top();
+
+	stackSize -= 1;
+}
 
 void init(void)
 {
 	Mode = HEIGHT_MODE;
 
+	pushIntoStacks();
+
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glEnable(GL_BLEND);
 
-	glClearColor(1.0, 1.0, 1.0, 1.0);
+	glClearColor(0.0, 0.0, 0.0, 1.0);
 
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LEQUAL);
 	glDepthMask(GL_TRUE);
 	//glDepthFunc(GL_LESS);
-	std::cout << "Current Mode: Base Mode";
+	cout << "Current Mode: Base Mode";
 
 
 	for (int i = 0; i < 5000; i++)
@@ -79,7 +126,7 @@ void reshape(int w, int h) {
 
 float getWeight(int half, int j) {
 	float d = float(float(half - j) / float(half));
-	return std::pow(std::pow(d, 2) - 1, 2);
+	return pow(pow(d, 2) - 1, 2);
 }
 
 void renderHeightMap() {
@@ -89,18 +136,18 @@ void renderHeightMap() {
 		arr[i] = new int[H];*/
 
 	float rColor;
-	int half = h / 2;
-	for (int i = 0; i < h-1; i++)
+	int half = hStack.top() / 2;
+	for (int i = 0; i < hStack.top()-1; i++)
 	{
 		glBegin(GL_TRIANGLE_STRIP);
 
 		float lastW = getWeight(half, 0);
 		float nextW = 0;
 
-		for (int j = 0; j < h - 1; j++) {
+		for (int j = 0; j < hStack.top() - 1; j++) {
 			//rColor = (abs((float)half - (float)j) / (float)half) * (float)(heightArray[j][1] - minHeight) / (float)(maxHeight - minHeight);
 
-			rColor = float(((heightArray[j][1] + heightArray[i][1])/2-minHeight)) / float((maxHeight-minHeight));
+			rColor = float(((heightArray[j][1] + heightArray[i][1])/2-mHStack.top())) / float((MHStack.top()-mHStack.top()));
 
 			//std::cout << rColor << "\n";
 
@@ -129,14 +176,14 @@ void renderWater() {
 	if (w == 0.0f)
 		return;
 
-	std::cout << h << "\n";
+	//cout << h << "\n";
 
 	//float xMin = heightArray[0][0], xMax = heightArray[h - 1][0];
 	//float zMin = -Z_DISP - heightArray[0][0], zMax = -Z_DISP - heightArray[h - 1][0];
 
-	float X[2] = { minBoundary, maxBoundary };
+	float X[2] = { mBStack.top(), MBStack.top() };
 	float Y[2] = { 0 + BASE_PLANE, w + BASE_PLANE };
-	float Z[2] = { -Z_DISP - minBoundary, - Z_DISP - maxBoundary };
+	float Z[2] = { -Z_DISP - mBStack.top(), - Z_DISP - MBStack.top() };
 	glColor4ub(133, 179, 252, 255);
 
 	glBegin(GL_POLYGON);
@@ -209,7 +256,7 @@ void renderGridLines() {
 
 void drawPoints()
 {
-	if (Mode == GENERATE_PERLIN) {
+	if (Mode == VIEW_MODE) {
 		renderWater();
 		renderHeightMap();
 	}
@@ -431,11 +478,11 @@ void myMouseMove(int xx, int yy)
 			//std::cout << "x:" << x << " y:" << y;
 			heightArray[h][0] = xx - DISPLACEMENT;
 			heightArray[h++][1] = DISPLACEMENT - yy;
-			minHeight = std::min(DISPLACEMENT - yy, minHeight);
-			maxHeight = std::max(DISPLACEMENT - yy, maxHeight);
+			minHeight = min(DISPLACEMENT - yy, minHeight);
+			maxHeight = max(DISPLACEMENT - yy, maxHeight);
 
-			minBoundary = std::min(minBoundary, xx - DISPLACEMENT);
-			maxBoundary = std::max(maxBoundary, xx - DISPLACEMENT);
+			minBoundary = min(minBoundary, xx - DISPLACEMENT);
+			maxBoundary = max(maxBoundary, xx - DISPLACEMENT);
 			//std::cout << maxHeight << " and " << minHeight;
 
 			lw = float(h) / 200.0f;
@@ -451,6 +498,7 @@ void handleMouseClicks(int button, int state, int x, int y) {
 		}
 		else if (state == GLUT_UP) {
 			LEFT_BUTTON_PRESSED = 0;
+			pushIntoStacks();
 		}
 	}
 
@@ -472,10 +520,10 @@ void generateLandformVector() {
 	int maxZ = -10000;
 
 	for (int i = 0; i < b; ++i) {
-		minX = std::min(baseArray[i][0], minX);
-		maxX = std::max(baseArray[i][0], maxX);
-		minZ = std::min(baseArray[i][1], minZ);
-		maxZ = std::max(baseArray[i][1], maxZ);
+		minX = min(baseArray[i][0], minX);
+		maxX = max(baseArray[i][0], maxX);
+		minZ = min(baseArray[i][1], minZ);
+		maxZ = max(baseArray[i][1], maxZ);
 	}
 }
 
@@ -486,18 +534,20 @@ void handleKeyClicks(unsigned char Key, int xx, int yy) {
 	{
 	case 'm':
 		if (Mode == BASE_MODE) {
-			std::cout << "Current Mode: Height Mode";
+			cout << "Current Mode: Height Mode";
 			Mode = HEIGHT_MODE;
 			//generateLandformVector();
 		}
 		else if (Mode == HEIGHT_MODE) {
-			std::cout << "Current Mode: Height Mode";
-			Mode = GENERATE_PERLIN;
+			cout << "Current Mode: Height Mode";
+			Mode = VIEW_MODE;
+			//pushIntoStacks();
 		}
-		else if (Mode == GENERATE_PERLIN) {
-			std::cout << "Current Mode: Perlin";
+		else if (Mode == VIEW_MODE) {
+			cout << "Current Mode: Perlin";
 			Mode = HEIGHT_MODE;
 		}
+		break;
 
 	case 'a':
 		angle -= 0.01f;
@@ -524,15 +574,18 @@ void handleKeyClicks(unsigned char Key, int xx, int yy) {
 		y -= ly * fr;
 		break;
 	case 'o':
-		if (Mode == GENERATE_PERLIN)
+		if (Mode == VIEW_MODE)
 			w += lw;
 		break;
 	case 'l':
-		if (Mode == GENERATE_PERLIN)
-			w = std::max(w-lw, 0.0f);
+		if (Mode == VIEW_MODE)
+			w = max(w-lw, 0.0f);
 		break;
 	case 'g':
 		gridLines = !gridLines;
+	case 'p':
+		popFromStacks();
+		break;
 	default:
 		break;
 	}
