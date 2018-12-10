@@ -7,7 +7,7 @@ This is a project that is a work in progress. This will allow users to sketch th
 The interface is divided into 2 modes which can be switched using **M**. These are:
 
 ##### Height Mode
-Here the user can define the spine curves of the terrain.
+Here the user can define the spine curves of the terrain. Any part of the curve below the base plane is drawn in red while anything above is drawn in green.
 
 ##### View Mode
 The user sees the generated terrains.
@@ -17,16 +17,15 @@ All the modes provide the user to move around. For faster movement, use the arro
 
 ## Controls
 1. BASIC CONTROLS
-- M Switch mode
-- G Toggle grids
-- O Increase water level
-- L Decrease water level
-- P Pop/Delete last terrain curve
-2. MOVEMENT (FAST/SLOW)
-- UP/WMove ahead
-- DOWN/SMove back
-- LEFT/A Turn left
-- RIGHT/D Turn right
-- PG UP/R Climb up
-- PG DN/F Climb down
-
+- G: Toggle grids
+- M: Toggle mode
+- O: Increase water level
+- L: Decrease water level
+- P: Pop/Delete last terrain curve
+2. MOVEMENT CONTROLS (FAST/SLOW)
+- UP/W: Move ahead
+- DOWN/S: Move back
+- LEFT/A: Turn left
+- RIGHT/D: Turn right
+- PG UP/R: Climb up
+- PG DN/F: Climb down
