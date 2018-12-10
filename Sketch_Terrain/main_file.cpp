@@ -159,13 +159,22 @@ void renderHeightMap() {
 			//glVertex3f(heightArray[i][0], BASE_PLANE + (abs((float)(half-j))/(float)half) * heightArray[i][1], -290 - heightArray[j][0]);
 		 	//glVertex3f(heightArray[i + 1][0], BASE_PLANE + (abs((float)(half - j - 1)) / (float)half) * heightArray[i + 1][1], -290  - heightArray[j + 1][0]);
 
-			glVertex3f(heightArray[i][0], BASE_PLANE + (lastW * heightArray[i][1]), - Z_DISP - heightArray[j][0]);
+			glVertex3f(heightArray[i][0], BASE_PLANE + (lastW * heightArray[i][1]), -Z_DISP - heightArray[j][0]);
 			nextW = getWeight(half, j + 1);
-			glVertex3f(heightArray[i + 1][0], BASE_PLANE + (nextW * heightArray[i + 1][1]), - Z_DISP - heightArray[j + 1][0]);
+			glVertex3f(heightArray[i + 1][0], BASE_PLANE + (nextW * heightArray[i + 1][1]), -Z_DISP - heightArray[j + 1][0]);
 			lastW = nextW;
+			
+
+			//if (lastW*heightArray[i][1] == 0) {
+			//	cout << i << " i i+1" << i + 1 << "\n";
+			//	cout << lastW << " * " << heightArray[i][1] << " = " << lastW * heightArray[i][1]<<" for i = "<<i<<"\n";
+			//}
+
+
 		}
+
+		glEnd();
 	}
-	glEnd();
 
 	/*for (int i = 0; i < H; i++)
 		delete[] arr[i];
@@ -173,19 +182,35 @@ void renderHeightMap() {
 }
 
 void renderWater() {
-	if (w == 0.0f)
-		return;
 
 	//cout << h << "\n";
 
 	//float xMin = heightArray[0][0], xMax = heightArray[h - 1][0];
 	//float zMin = -Z_DISP - heightArray[0][0], zMax = -Z_DISP - heightArray[h - 1][0];
 
+	if (w == 0.0f)
+		return;
+
 	float X[2] = { mBStack.top(), MBStack.top() };
 	float Y[2] = { 0 + BASE_PLANE, w + BASE_PLANE };
 	float Z[2] = { -Z_DISP - mBStack.top(), - Z_DISP - MBStack.top() };
 	glColor4ub(133, 179, 252, 255);
 
+
+	glBegin(GL_POLYGON);
+
+	glVertex3f(X[0], Y[1], Z[0]);
+	glVertex3f(X[0], Y[1], Z[1]);
+	glVertex3f(X[1], Y[1], Z[1]);
+	glVertex3f(X[1], Y[1], Z[0]);
+
+	glEnd();
+
+
+	if (w < 0.0f)
+		return;
+
+
 	glBegin(GL_POLYGON);
 
 	glVertex3f(X[0], Y[0], Z[0]);
@@ -208,14 +233,6 @@ void renderWater() {
 	glVertex3f(X[0], Y[0], Z[1]);
 	glVertex3f(X[1], Y[0], Z[1]);
 	glVertex3f(X[1], Y[0], Z[0]);
-
-	glEnd();
-	glBegin(GL_POLYGON);
-
-	glVertex3f(X[0], Y[1], Z[0]);
-	glVertex3f(X[0], Y[1], Z[1]);
-	glVertex3f(X[1], Y[1], Z[1]);
-	glVertex3f(X[1], Y[1], Z[0]);
 
 	glEnd();
 	glBegin(GL_POLYGON);
@@ -579,10 +596,12 @@ void handleKeyClicks(unsigned char Key, int xx, int yy) {
 		break;
 	case 'l':
 		if (Mode == VIEW_MODE)
-			w = max(w-lw, 0.0f);
+			w -= lw;
+			//w = max(w-lw, 0.0f);
 		break;
 	case 'g':
 		gridLines = !gridLines;
+		break;
 	case 'p':
 		popFromStacks();
 		break;

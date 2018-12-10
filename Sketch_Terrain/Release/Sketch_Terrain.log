@@ -1,18 +1,18 @@
 ﻿  main_file.cpp
-c:\users\saura\source\repos\sketch_terrain\sketch_terrain\main_file.cpp(184): warning C4838: conversion from '_Ty' to 'float' requires a narrowing conversion
+c:\users\saura\source\repos\sketch_terrain\sketch_terrain\main_file.cpp(194): warning C4838: conversion from '_Ty' to 'float' requires a narrowing conversion
           with
           [
               _Ty=int
           ]
-c:\users\saura\source\repos\sketch_terrain\sketch_terrain\main_file.cpp(186): warning C4838: conversion from '_Ty' to 'float' requires a narrowing conversion
+c:\users\saura\source\repos\sketch_terrain\sketch_terrain\main_file.cpp(196): warning C4838: conversion from '_Ty' to 'float' requires a narrowing conversion
           with
           [
               _Ty=int
           ]
-c:\users\saura\source\repos\sketch_terrain\sketch_terrain\main_file.cpp(241): warning C4101: 'j': unreferenced local variable
-c:\users\saura\source\repos\sketch_terrain\sketch_terrain\main_file.cpp(418): warning C4101: 'M': unreferenced local variable
+c:\users\saura\source\repos\sketch_terrain\sketch_terrain\main_file.cpp(258): warning C4101: 'j': unreferenced local variable
+c:\users\saura\source\repos\sketch_terrain\sketch_terrain\main_file.cpp(435): warning C4101: 'M': unreferenced local variable
   Generating code
-  3 of 150 functions ( 2.0%) were compiled, the rest were copied from previous compilation.
+  2 of 149 functions ( 1.3%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
     0 functions had inline decision re-evaluated but remain unchanged
   Finished generating code
