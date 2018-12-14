@@ -3,6 +3,8 @@ Procedural Terrain Generation using Sketch for my Computer Graphics Course (CSE 
 
 This is a project that is a work in progress. This will allow users to sketch the terrain in space, as if using Paint, and then generate a procedural terrain within those constraints. The noise that is defined in the silhouette terrain line will then be propagated throughout the landform to create a realistic landform.
 
+If you are just interested in try out the application, download `Sketch_Terrain.exe` from the `Release` folder.
+
 ## Interface
 The interface is divided into 2 modes which can be switched using **M**. These are:
 
